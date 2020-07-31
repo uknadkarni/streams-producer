@@ -1,0 +1,16 @@
+server:
+  port: 9092
+
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrap-servers: "localhost:9092, localhost:9093"
+
+
+topic: "strings"
+numberOfEvents: 100000
+numPartitions: 5
+replicationFactor: 1
