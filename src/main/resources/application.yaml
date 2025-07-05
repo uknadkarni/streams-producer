@@ -1,16 +1,64 @@
+# =============================================================================
+# Spring Boot Kafka Producer Application Configuration
+# =============================================================================
+# This configuration file defines the settings for the Kafka producer application.
+# It includes server settings, Kafka connection parameters, and application-specific
+# properties for message production.
+
+# =============================================================================
+# Server Configuration
+# =============================================================================
+# Note: This port setting may conflict with Kafka broker if running on same machine
 server:
   port: 9092
 
+# =============================================================================
+# Spring Kafka Configuration
+# =============================================================================
+# Configuration for Spring Kafka producer settings including connection details
+# and serialization settings for keys and values.
 spring:
   kafka:
+    # Producer-specific configuration
     producer:
+      # Kafka broker addresses for producer connections
+      # Primary broker address - should match your Kafka cluster configuration
       bootstrap-servers: localhost:9092
+
+      # Serializer for message keys - converts Java objects to byte arrays
+      # Using StringSerializer for simple string keys
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+      # Serializer for message values - converts Java objects to byte arrays
+      # Using StringSerializer for simple string message content
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+    # Global bootstrap servers configuration (fallback)
+    # Multiple brokers can be specified for high availability
     bootstrap-servers: "localhost:9092, localhost:9093"
 
+# =============================================================================
+# Application-Specific Configuration
+# =============================================================================
+# Custom properties used by the application for Kafka topic and message settings
 
+# Name of the Kafka topic to create and send messages to
+# This topic will be automatically created if it doesn't exist
 topic: "strings"
+
+# Total number of messages to produce and send to Kafka
+# Can be overridden via command line: --numberOfEvents=<number>
+# Default: 100,000 messages for demonstration purposes
 numberOfEvents: 100000
+
+# Number of partitions to create for the Kafka topic
+# More partitions allow for better parallelism and throughput
+# Recommended: Set based on expected throughput and consumer parallelism
 numPartitions: 5
+
+# Replication factor for the Kafka topic
+# Number of broker replicas for each partition (for fault tolerance)
+# Should not exceed the number of available brokers in your cluster
+# For single-broker development setup: 1
+# For production: typically 3 or higher
 replicationFactor: 1
